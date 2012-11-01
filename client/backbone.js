@@ -49,6 +49,11 @@ Backbone.sync = function(method, model, options) {
 
     if (method !== 'read') {
         var modelJSON = model.toJSON ? model.toJSON() : model;
+        // Merge query string with model attributes
+        if (options.data) {
+            modelJSON = _.extend(modelJSON, options.data);
+            delete options.data;
+        }
         modelJSON['bones.token'] = Backbone.csrf(getUrl(model));
         modelJSON = JSON.stringify(modelJSON);
     }
@@ -60,7 +65,7 @@ Backbone.sync = function(method, model, options) {
         contentType:  'application/json',
         data:         (modelJSON || null),
         dataType:     'json',
-        processData:  method === 'read',
+        processData:  method === 'read'
     }, options);
 
     // Make the request.

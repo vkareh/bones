@@ -118,7 +118,7 @@ server.prototype.loadModel = function(req, res, next) {
 
 server.prototype.getModel = function(req, res, next) {
     if (!req.model) return next();
-    req.model.fetch({
+    var options = {
         success: function(model, resp) {
             res.send(resp, headers);
         },
@@ -126,7 +126,12 @@ server.prototype.getModel = function(req, res, next) {
             var error = err instanceof Object ? err.message : err;
             next(new Error.HTTP(error, err && err.status || 404));
         }
-    });
+    };
+    if (!_.isEmpty(req.query)) {
+        // Send query string to server-side sync
+        options = _.extend(options, {query: req.query});
+    }
+    req.model.fetch(options);
 };
 
 server.prototype.saveModel = function(req, res, next) {
