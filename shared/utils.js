@@ -45,7 +45,7 @@ Bones.utils.uncountable = [ 'advice', 'enegery', 'excretion', 'digestion',
     'news' ];
 
 Bones.utils.singularize = function(text) {
-    if (Bones.utils.uncountable.indexOf(text.toLowerCase()) >= 0) return text;
+    if (_.contains(Bones.utils.uncountable, text.toLowerCase())) return text;
     for (var i = Bones.utils.singularize.rules.length - 1; i >= 0; i--) {
         var rule = Bones.utils.singularize.rules[i];
         if (rule[0].test(text)) {
